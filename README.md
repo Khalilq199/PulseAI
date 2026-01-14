@@ -1,6 +1,9 @@
 # PulseAI
 A chatbot tailored to the medical domain with a Retrieval Augmented Generation implementation, deployed on AWS.
 
+# Learn more about the approach and process of this project
+Check out the [Substack](https://khalilahmadqamar.substack.com/p/pulseai-medical-rag-chatbot) for more info.
+
 # How to run?
 ### STEPS:
 
