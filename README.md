@@ -10,9 +10,9 @@ A chatbot tailored to the medical domain with a Retrieval Augmented Generation i
 
 <p align="center">
   <img 
-    src="https://github.com/user-attachments/assets/6ed55d10-43a3-43d4-baf6-57fb45451ec8" 
-    alt="RAG pipeline architecture diagram"
-    width="700"
+    src="https://github.com/user-attachments/assets/e7febece-2b7d-42df-80fd-0ffdbd1bc03d" 
+    alt="Deployment architecture diagram"
+    width="900"
   />
 </p>
 
@@ -22,7 +22,7 @@ A chatbot tailored to the medical domain with a Retrieval Augmented Generation i
 
 <p align="center">
   <img 
-    src="https://github.com/user-attachments/assets/e7febece-2b7d-42df-80fd-0ffdbd1bc03d" 
+    src="https://github.com/user-attachments/assets/6ace51ce-d88b-4654-b538-b206c6003e31"
     alt="Deployment architecture diagram"
     width="900"
   />
