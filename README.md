@@ -29,25 +29,5 @@ A chatbot tailored to the medical domain with a Retrieval Augmented Generation i
 </p>
 
 
-# How to run?
-### STEPS:
 
-Clone the repository
-
-```bash
-git https://github.com/Khalilq199/PulseAI.git
-```
-### STEP 01- Create a conda environment after opening the repository
-
-```bash
-conda create -n pulseai python=3.10 -y
-```
-
-```bash
-conda activate pulseai
-```
-
-### STEP 02- install the requirements
-```bash
-pip install -r requirements.txt
 ```

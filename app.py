@@ -1,3 +1,5 @@
+# in future add memory, maybe use conversation buffer memory
+
 from flask import Flask, render_template, jsonify, request
 from src.helper import download_embeddings
 from langchain_pinecone import PineconeVectorStore
