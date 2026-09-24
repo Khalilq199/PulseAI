@@ -1,81 +1,196 @@
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#eaf0f2">
+    <title>PulseAI — Medical Knowledge Assistant</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <main class="app-shell">
+        <header class="app-header">
+            <a class="brand" href="/" aria-label="PulseAI home">
+                <span class="brand-mark" aria-hidden="true">
+                    <svg viewBox="0 0 32 32" fill="none">
+                        <path d="M4 17h6l3-8 5 15 3-7h7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </span>
+                <span class="brand-name">PulseAI</span>
+            </a>
+            <div class="header-copy">
+                <span class="page-title">Medical Knowledge Assistant</span>
+                <span class="page-subtitle">Answers grounded in the medical references in its knowledge base</span>
+            </div>
+            <button class="new-chat-button" id="new-chat" type="button" aria-label="Start a new chat">
+                <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                    <path d="M10 4v12M4 10h12" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+                </svg>
+                <span>New chat</span>
+            </button>
+        </header>
 
-<!DOCTYPE html>
-<html>
-	<head>
-		<title>Medical Assistant</title>
-		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css')}}"/>
-	</head>
-	
-	
-	<body>
-		<div class="container-fluid h-100">
-			<div class="row justify-content-center h-100">		
-				<div class="col-md-8 col-xl-6 chat">
-					<div class="card">
-						<div class="card-header msg_head">
-							<div class="d-flex bd-highlight">
-								<div class="img_cont">
-									<img src="https://cdn-icons-png.flaticon.com/512/387/387569.png" class="rounded-circle user_img">
-									<!-- <img src="https://www.prdistribution.com/spirit/uploads/pressreleases/2019/newsreleases/d83341deb75c4c4f6b113f27b1e42cd8-chatbot-florence-already-helps-thousands-of-patients-to-remember-their-medication.png" class="rounded-circle user_img"> -->
-									<span class="online_icon"></span>
-								</div>
-								<div class="user_info">
-									<span>Medical Diagnosis Assistant</span>
-									<p>Ask me anything!</p>
-								</div>
-							</div>
-						</div>
-						<div id="messageFormeight" class="card-body msg_card_body">
-							
-							
-						</div>
-						<div class="card-footer">
-							<form id="messageArea" class="input-group">
-                                <input type="text" id="text" name="msg" placeholder="Type your message..." autocomplete="off" class="form-control type_msg" required/>
-								<div class="input-group-append">
-									<button type="submit" id="send" class="input-group-text send_btn"><i class="fas fa-location-arrow"></i></button>
-								</div>
-							</form>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		
-		<script>
-			$(document).ready(function() {
-				$("#messageArea").on("submit", function(event) {
-					const date = new Date();
-					const hour = date.getHours();
-					const minute = date.getMinutes();
-					const str_time = hour+":"+minute;
-					var rawText = $("#text").val();
+        <section class="conversation-panel" aria-label="Conversation">
+            <div class="conversation" id="conversation" role="log" aria-live="polite" aria-relevant="additions">
+                <article class="message assistant-message">
+                    <img class="avatar assistant-avatar" src="https://cdn-icons-png.flaticon.com/512/387/387569.png" alt="" aria-hidden="true">
+                    <div class="message-content">
+                        <div class="message-label">PulseAI</div>
+                        <p class="message-bubble assistant-bubble">Hi, I’m PulseAI. Ask a medical education question and I’ll answer using the references in my knowledge base.</p>
+                    </div>
+                </article>
+            </div>
+        </section>
 
-					var userHtml = '<div class="d-flex justify-content-end mb-4"><div class="msg_cotainer_send">' + rawText + '<span class="msg_time_send">'+ str_time + '</span></div><div class="img_cont_msg"><img src="https://i.ibb.co/d5b84Xw/Untitled-design.png" class="rounded-circle user_img_msg"></div></div>';
-					
-					$("#text").val("");
-					$("#messageFormeight").append(userHtml);
+        <footer class="composer-area">
+            <form class="composer" id="message-form" action="/get" method="post">
+                <label class="visually-hidden" for="message-input">Ask a medical question</label>
+                <input id="message-input" name="msg" type="text" placeholder="Ask a medical question..." autocomplete="off" required>
+                <button class="send-button" id="send-button" type="submit">
+                    <span>Send</span>
+                    <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                        <path d="M3 10h13M10.5 4.5 16 10l-5.5 5.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </form>
+            <p class="composer-note">For medical education. Responses may be incomplete.</p>
+        </footer>
+    </main>
 
-					$.ajax({
-						data: {
-							msg: rawText,	
-						},
-						type: "POST",
-						url: "/get",
-					}).done(function(data) {
-						var botHtml = '<div class="d-flex justify-content-start mb-4"><div class="img_cont_msg"><img src="https://cdn-icons-png.flaticon.com/512/387/387569.png" class="rounded-circle user_img_msg"></div><div class="msg_cotainer">' + data + '<span class="msg_time">' + str_time + '</span></div></div>';
-						$("#messageFormeight").append($.parseHTML(botHtml));
-					});
-					event.preventDefault();
-				});
-			});
-		</script>
-        
-    </body>
+    <script>
+        (() => {
+            const form = document.getElementById("message-form");
+            const input = document.getElementById("message-input");
+            const sendButton = document.getElementById("send-button");
+            const conversation = document.getElementById("conversation");
+            const newChatButton = document.getElementById("new-chat");
+            const welcomeMessage = conversation.firstElementChild.cloneNode(true);
+            const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+            let activeRequest = null;
+
+            function restoreComposer() {
+                input.disabled = false;
+                sendButton.disabled = false;
+                sendButton.querySelector("span").textContent = "Send";
+            }
+
+            newChatButton.addEventListener("click", () => {
+                if (activeRequest) {
+                    activeRequest.abort();
+                    activeRequest = null;
+                }
+                conversation.replaceChildren(welcomeMessage.cloneNode(true));
+                input.value = "";
+                restoreComposer();
+                conversation.scrollTo({ top: 0, behavior: "auto" });
+                input.focus();
+            });
+
+            function timestamp() {
+                return new Intl.DateTimeFormat(undefined, {
+                    hour: "numeric",
+                    minute: "2-digit"
+                }).format(new Date());
+            }
+
+            function scrollToLatest() {
+                conversation.scrollTo({
+                    top: conversation.scrollHeight,
+                    behavior: reducedMotion.matches ? "auto" : "smooth"
+                });
+            }
+
+            function avatar(isAssistant) {
+                const element = document.createElement("img");
+                element.className = `avatar ${isAssistant ? "assistant-avatar" : "user-avatar"}`;
+                element.src = isAssistant
+                    ? "https://cdn-icons-png.flaticon.com/512/387/387569.png"
+                    : "https://i.ibb.co/d5b84Xw/Untitled-design.png";
+                element.alt = "";
+                element.setAttribute("aria-hidden", "true");
+                return element;
+            }
+
+            function addMessage(text, isAssistant, options = {}) {
+                const row = document.createElement("article");
+                row.className = `message ${isAssistant ? "assistant-message" : "user-message"}`;
+                if (options.error) row.classList.add("error-message");
+                if (options.typing) {
+                    row.classList.add("typing-message");
+                    row.setAttribute("aria-label", "PulseAI is preparing a response");
+                }
+                row.append(avatar(isAssistant));
+
+                const content = document.createElement("div");
+                content.className = "message-content";
+                const label = document.createElement("div");
+                label.className = "message-label";
+                label.append(document.createTextNode(isAssistant ? "PulseAI" : "You"));
+                const time = document.createElement("time");
+                time.className = "message-time";
+                time.dateTime = new Date().toISOString();
+                time.textContent = timestamp();
+                label.append(time);
+                content.append(label);
+
+                const bubble = document.createElement("p");
+                bubble.className = `message-bubble ${isAssistant ? "assistant-bubble" : "user-bubble"}`;
+                if (options.typing) {
+                    bubble.classList.add("typing-bubble");
+                    bubble.setAttribute("role", "status");
+                    bubble.setAttribute("aria-label", "Thinking");
+                    bubble.innerHTML = "<span></span><span></span><span></span>";
+                } else {
+                    bubble.textContent = text;
+                }
+                content.append(bubble);
+                row.append(content);
+                conversation.append(row);
+                scrollToLatest();
+                return row;
+            }
+
+            form.addEventListener("submit", async (event) => {
+                event.preventDefault();
+                const message = input.value.trim();
+                if (!message || sendButton.disabled) return;
+
+                addMessage(message, false);
+                input.value = "";
+                input.disabled = true;
+                sendButton.disabled = true;
+                sendButton.querySelector("span").textContent = "Sending";
+                const typingMessage = addMessage("", true, { typing: true });
+                const controller = new AbortController();
+                activeRequest = controller;
+
+                try {
+                    const response = await fetch("/get", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
+                        },
+                        body: new URLSearchParams({ msg: message }),
+                        signal: controller.signal
+                    });
+                    if (!response.ok) throw new Error("Request failed");
+                    const answer = await response.text();
+                    typingMessage.remove();
+                    addMessage(answer, true);
+                } catch (error) {
+                    typingMessage.remove();
+                    if (error.name !== "AbortError") {
+                        addMessage("I couldn’t complete that request. Please try again.", true, { error: true });
+                    }
+                } finally {
+                    if (activeRequest === controller) {
+                        activeRequest = null;
+                        restoreComposer();
+                        input.focus();
+                    }
+                }
+            });
+        })();
+    </script>
+</body>
 </html>
